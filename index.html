@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariam Elbendary | Frontend Developer (React.js / Next.js)</title>
+    <meta name="description" content="Frontend Developer specializing in React.js, Next.js, JavaScript, TypeScript, REST API integration, state management, and responsive web applications. Based in Cairo, Egypt.">
+    <meta name="author" content="Mariam Mohammed Elbendary">
+    <meta property="og:title" content="Mariam Elbendary | Frontend Developer">
+    <meta property="og:description" content="React.js / Next.js Frontend Developer based in Cairo, Egypt. Modern, responsive web applications with clean component architecture.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%2310B981%22 font-weight=%22bold%22 font-family=%22sans-serif%22>ME</text></svg>">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0B0F17',
+                        cardBg: '#111827',
+                        cardBorder: '#1F2937',
+                        emeraldAccent: '#10B981',
+                        emeraldHover: '#059669',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & Lucide Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0F17;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10B981;
+        }
+
+        /* Subtle Ambient Background Gradient */
+        .ambient-bg {
+            background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, rgba(11, 15, 23, 0) 70%);
+        }
+
+        /* Card Glow effect */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(31, 41, 55, 0.8);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
+        }
+
+        .active-nav-link {
+            color: #10B981;
+            font-weight: 600;
+        }
+
+        /* Modal backdrop animation */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 200ms ease-out, transform 200ms ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emeraldAccent selection:text-black ambient-bg">
+
+    <!-- Toast Notification Banner -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-in-out bg-cardBg border border-emeraldAccent text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-none">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emeraldAccent"></i>
+        <span id="toast-message" class="text-sm font-medium">Notification message</span>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-darkBg/80 border-b border-cardBorder/60 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Logo -->
+                <a href="#home" class="flex items-center space-x-2 group">
+                    <div class="w-9 h-9 rounded-lg bg-emeraldAccent/10 border border-emeraldAccent/30 flex items-center justify-center text-emeraldAccent font-bold text-lg group-hover:bg-emeraldAccent group-hover:text-black transition-all">
+                        ME
+                    </div>
+                    <span class="text-white font-bold tracking-tight text-lg hidden sm:inline-block">
+                        Mariam <span class="text-emeraldAccent">Elbendary</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                    <a href="#about" class="hover:text-emeraldAccent transition-colors">About</a>
+                    <a href="#skills" class="hover:text-emeraldAccent transition-colors">Skills</a>
+                    <a href="#experience" class="hover:text-emeraldAccent transition-colors">Experience</a>
+                    <a href="#projects" class="hover:text-emeraldAccent transition-colors">Projects</a>
+                    <a href="#contact" class="hover:text-emeraldAccent transition-colors">Contact</a>
+                </nav>
+
+                <!-- Header Actions -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="toggleConfigModal()" title="Configure External Links" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cardBorder/50 transition">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
+                    <a id="nav-github-link" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="p-2 text-gray-400 hover:text-emeraldAccent transition-colors" title="GitHub Profile">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a id="nav-linkedin-link" href="https://linkedin.com/in/mariam-elbendary" target="_blank" rel="noopener noreferrer" class="p-2 text-gray-400 hover:text-emeraldAccent transition-colors" title="LinkedIn Profile">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#contact" class="px-4 py-2 text-sm font-semibold rounded-lg bg-emeraldAccent/10 text-emeraldAccent border border-emeraldAccent/30 hover:bg-emeraldAccent hover:text-black transition-all duration-200">
+                        Hire Me
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="flex items-center md:hidden space-x-2">
+                    <button onclick="toggleConfigModal()" class="p-2 rounded-lg text-gray-400 hover:text-white">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu" class="p-2 rounded-lg text-gray-300 hover:text-white hover:bg-cardBorder focus:outline-none">
+                        <i data-lucide="menu" id="menu-icon-open" class="w-6 h-6"></i>
+                        <i data-lucide="x" id="menu-icon-close" class="w-6 h-6 hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cardBg border-b border-cardBorder px-4 pt-3 pb-6 space-y-3 transition-all duration-300">
+            <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-emeraldAccent font-medium">About</a>
+            <a href="#skills" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-emeraldAccent font-medium">Skills</a>
+            <a href="#experience" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-emeraldAccent font-medium">Experience</a>
+            <a href="#projects" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-emeraldAccent font-medium">Projects</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-emeraldAccent font-medium">Contact</a>
+            
+            <div class="pt-4 border-t border-cardBorder flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a id="mobile-github-link" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a id="mobile-linkedin-link" href="https://linkedin.com/in/mariam-elbendary" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                </div>
+                <a href="#contact" onclick="toggleMobileMenu()" class="px-4 py-2 text-xs font-semibold rounded-lg bg-emeraldAccent text-black">
+                    Contact Me
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 space-y-24">
+
+        <!-- 1. HERO SECTION -->
+        <section id="home" class="pt-12 md:pt-20 pb-8 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="flex-1 space-y-6 text-left">
+                <!-- Status Badge -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emeraldAccent/10 border border-emeraldAccent/20 text-emeraldAccent text-xs font-semibold tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-emeraldAccent animate-pulse"></span>
+                    Available for Frontend Roles
+                </div>
+
+                <!-- Main Titles -->
+                <div class="space-y-2">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                        Mariam Mohammed <br class="hidden sm:inline" />
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emeraldAccent to-teal-400">
+                            Elbendary
+                        </span>
+                    </h1>
+                    <p class="text-xl sm:text-2xl font-medium text-gray-300">
+                        Frontend Developer <span class="text-emeraldAccent font-normal">| React.js & Next.js Specialist</span>
+                    </p>
+                </div>
+
+                <!-- Core Statement -->
+                <p class="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                    I build modern, responsive web applications with React.js and Next.js. Focused on clean component architecture, seamless REST API integration, dynamic state management, and user-centric frontend experiences.
+                </p>
+
+                <!-- Technology Pills -->
+                <div class="flex flex-wrap gap-2 text-xs font-mono text-gray-300">
+                    <span class="px-3 py-1.5 rounded-md bg-cardBg border border-cardBorder">React.js</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cardBg border border-cardBorder">Next.js</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cardBg border border-cardBorder">TypeScript</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cardBg border border-cardBorder">JavaScript (ES6+)</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cardBg border border-cardBorder">Tailwind CSS</span>
+                    <span class="px-3 py-1.5 rounded-md bg-cardBg border border-cardBorder">REST APIs</span>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="pt-4 flex flex-wrap items-center gap-4">
+                    <a href="#projects" class="px-6 py-3 rounded-xl bg-emeraldAccent hover:bg-emeraldHover text-black font-semibold shadow-lg shadow-emeraldAccent/10 transition-all flex items-center gap-2">
+                        View My Work
+                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#contact" class="px-6 py-3 rounded-xl bg-cardBg hover:bg-cardBorder text-white font-medium border border-cardBorder transition-all flex items-center gap-2">
+                        Contact Me
+                        <i data-lucide="mail" class="w-4 h-4 text-emeraldAccent"></i>
+                    </a>
+                </div>
+
+                <!-- Social Links Quick Bar -->
+                <div class="pt-2 flex items-center gap-6 text-gray-400 text-sm">
+                    <a id="hero-github-link" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="hover:text-emeraldAccent transition flex items-center gap-1.5">
+                        <i data-lucide="github" class="w-4 h-4"></i> GitHub
+                    </a>
+                    <a id="hero-linkedin-link" href="https://linkedin.com/in/mariam-elbendary" target="_blank" rel="noopener noreferrer" class="hover:text-emeraldAccent transition flex items-center gap-1.5">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i> LinkedIn
+                    </a>
+                    <a href="mailto:mariam.elbendary.els@gmail.com" class="hover:text-emeraldAccent transition flex items-center gap-1.5">
+                        <i data-lucide="mail" class="w-4 h-4"></i> mariam.elbendary.els@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <!-- Developer Profile Visual Card -->
+            <div class="w-full md:w-80 lg:w-96 flex-shrink-0">
+                <div class="glass-card rounded-2xl p-6 relative overflow-hidden border border-cardBorder">
+                    <div class="absolute -top-12 -right-12 w-36 h-36 bg-emeraldAccent/10 rounded-full blur-2xl"></div>
+                    
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emeraldAccent to-teal-500 flex items-center justify-center text-black font-extrabold text-2xl shadow-lg shadow-emeraldAccent/20">
+                            ME
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Mariam Elbendary</h3>
+                            <p class="text-emeraldAccent text-sm font-medium">Cairo, Egypt 🇪🇬</p>
+                            <p class="text-gray-400 text-xs mt-0.5">Menoufia University B.Sc</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2 text-xs border-t border-cardBorder text-gray-300">
+                        <div class="flex justify-between items-center py-1">
+                            <span class="text-gray-400">Positioning</span>
+                            <span class="font-medium text-white">Frontend Specialist</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1">
+                            <span class="text-gray-400">Route Assessment</span>
+                            <span class="font-semibold text-emeraldAccent bg-emeraldAccent/10 px-2 py-0.5 rounded border border-emeraldAccent/20">100 / 100 Score</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1">
+                            <span class="text-gray-400">Education Grade</span>
+                            <span class="font-medium text-white">Very Good with Honor</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1">
+                            <span class="text-gray-400">Core Stack</span>
+                            <span class="font-medium text-gray-200">React • Next.js • TS</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-cardBorder/60 flex justify-between items-center">
+                        <span class="text-xs text-gray-400">Status</span>
+                        <span class="text-xs font-semibold text-emeraldAccent flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Ready to Contribute
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ABOUT SECTION -->
+        <section id="about" class="space-y-8 scroll-mt-20">
+            <div class="space-y-2">
+                <span class="text-emeraldAccent font-mono text-xs font-semibold tracking-wider uppercase">01. Summary</span>
+                <h2 class="text-3xl font-bold text-white">About Me</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Text Content -->
+                <div class="md:col-span-2 glass-card rounded-2xl p-6 sm:p-8 space-y-4 text-gray-300 leading-relaxed text-base">
+                    <p>
+                        I am a <strong class="text-white">Frontend Developer</strong> passionate about building fast, responsive, and intuitive web applications using modern tools like <strong class="text-emeraldAccent">React.js, Next.js, JavaScript, and TypeScript</strong>.
+                    </p>
+                    <p>
+                        My background centers on constructing modular component architectures, integrating complex REST APIs, managing client-side application state, implementing authentication flows, and ensuring precise form validations.
+                    </p>
+                    <p>
+                        I value writing scalable, maintainable code and translating complex design requirements into seamless user interfaces. Continuous learning and collaborative engineering environments drive my day-to-day growth.
+                    </p>
+                </div>
+
+                <!-- Highlight Cards -->
+                <div class="space-y-4">
+                    <div class="glass-card rounded-xl p-5 border border-cardBorder">
+                        <div class="text-emeraldAccent font-bold text-2xl">100/100</div>
+                        <div class="text-white font-medium text-sm mt-1">JavaScript Practical Score</div>
+                        <p class="text-gray-400 text-xs mt-1">Achieved perfect score in practical JavaScript engineering at Route Academy.</p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-5 border border-cardBorder">
+                        <div class="text-white font-bold text-lg">Menoufia University</div>
+                        <div class="text-emeraldAccent font-medium text-sm">B.Sc Computer Science</div>
+                        <p class="text-gray-400 text-xs mt-1">Graduated with <strong class="text-white">Very Good with Honor</strong> (Jan 2021 – Jun 2026).</p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-5 border border-cardBorder">
+                        <div class="text-white font-bold text-lg">Cairo, Egypt</div>
+                        <div class="text-gray-400 text-xs mt-1">Open to local and remote collaborative developer teams worldwide.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SKILLS SECTION -->
+        <section id="skills" class="space-y-8 scroll-mt-20">
+            <div class="space-y-2">
+                <span class="text-emeraldAccent font-mono text-xs font-semibold tracking-wider uppercase">02. Capabilities</span>
+                <h2 class="text-3xl font-bold text-white">Technical Skills</h2>
+                <p class="text-gray-400 text-sm">Categorized breakdown of tools, frameworks, and web technologies I use daily.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Frontend -->
+                <div class="glass-card rounded-2xl p-6 border border-cardBorder space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 rounded-lg bg-emeraldAccent/10 text-emeraldAccent">
+                            <i data-lucide="layout" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-white font-bold">Frontend</h3>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Next.js (App Router)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> React.js</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> TypeScript</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> JavaScript (ES6+)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Tailwind CSS</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Bootstrap</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> HTML5 & CSS3</li>
+                    </ul>
+                </div>
+
+                <!-- Core Concepts -->
+                <div class="glass-card rounded-2xl p-6 border border-cardBorder space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 rounded-lg bg-emeraldAccent/10 text-emeraldAccent">
+                            <i data-lucide="code-2" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-white font-bold">Core Concepts</h3>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Responsive Web Design</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> REST API Integration</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Component Architecture</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Client-side State Management</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Authentication Flows</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Form Validation</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Async Programming</li>
+                    </ul>
+                </div>
+
+                <!-- Libraries & Ecosystem -->
+                <div class="glass-card rounded-2xl p-6 border border-cardBorder space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 rounded-lg bg-emeraldAccent/10 text-emeraldAccent">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-white font-bold">Libraries & Tools</h3>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> TanStack Query</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> React Hook Form & Zod</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> NextAuth.js</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> shadcn/ui</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> React Router & Axios</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> Git & GitHub</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emeraldAccent"></span> VS Code & Figma</li>
+                    </ul>
+                </div>
+
+                <!-- Additional & Basics -->
+                <div class="glass-card rounded-2xl p-6 border border-cardBorder space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 rounded-lg bg-emeraldAccent/10 text-emeraldAccent">
+                            <i data-lucide="database" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-white font-bold">Additional Basics</h3>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span> Node.js (Basic)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span> MongoDB (Basic)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span> SQL Fundamentals</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span> Python (Basic)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span> Jira & Agile Planning</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gray-500"></span> Technical PRD Analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. EXPERIENCE & TRAINING SECTION -->
+        <section id="experience" class="space-y-8 scroll-mt-20">
+            <div class="space-y-2">
+                <span class="text-emeraldAccent font-mono text-xs font-semibold tracking-wider uppercase">03. Career & Training</span>
+                <h2 class="text-3xl font-bold text-white">Experience & Education</h2>
+            </div>
+
+            <div class="space-y-6 relative before:absolute before:inset-0 before:left-3 sm:before:left-8 before:w-0.5 before:bg-cardBorder">
+                
+                <!-- Experience Item 1: Route Academy -->
+                <div class="relative pl-8 sm:pl-16 group">
+                    <div class="absolute left-1 sm:left-6 top-1.5 w-4 h-4 rounded-full bg-darkBg border-2 border-emeraldAccent group-hover:bg-emeraldAccent transition"></div>
+                    <div class="glass-card rounded-2xl p-6 sm:p-8 border border-cardBorder space-y-4">
+                        <div class="flex flex-wrap items-start justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-semibold uppercase text-emeraldAccent tracking-wider">Diploma</span>
+                                <h3 class="text-xl font-bold text-white">Route Academy</h3>
+                                <p class="text-gray-300 font-medium">Front-End Web Development Diploma</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-gray-400 font-mono">Mar 2026 – Sep 2026</span>
+                                <div class="mt-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emeraldAccent/10 border border-emeraldAccent/30 text-emeraldAccent font-bold text-xs">
+                                    <i data-lucide="award" class="w-3.5 h-3.5"></i> 100/100 JS Assessment
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Intensive practical program covering modern JavaScript (ES6+), TypeScript, React.js, and Next.js. Built real-world web applications emphasizing component modularity, state management, REST API consumption, and Tailwind CSS layouts.
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 text-xs font-mono text-gray-300">
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">React.js</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Next.js</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">TypeScript</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">SSR / CSR</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">REST APIs</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Tailwind CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2: DEPI -->
+                <div class="relative pl-8 sm:pl-16 group">
+                    <div class="absolute left-1 sm:left-6 top-1.5 w-4 h-4 rounded-full bg-darkBg border-2 border-emeraldAccent group-hover:bg-emeraldAccent transition"></div>
+                    <div class="glass-card rounded-2xl p-6 sm:p-8 border border-cardBorder space-y-4">
+                        <div class="flex flex-wrap items-start justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-semibold uppercase text-emeraldAccent tracking-wider">Government Training</span>
+                                <h3 class="text-xl font-bold text-white">Digital Egypt Pioneers Initiative (DEPI)</h3>
+                                <p class="text-gray-300 font-medium">Front-End Track</p>
+                            </div>
+                            <span class="text-xs text-gray-400 font-mono">Jan 2024 – Jun 2024</span>
+                        </div>
+
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            6-month intensive web development track focusing on React, Next.js, and Tailwind CSS. Participated in team collaboration using Git and GitHub workflows, backend integration concepts, and MongoDB basics.
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 text-xs font-mono text-gray-300">
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">React</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Next.js</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Tailwind CSS</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Git Workflow</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 3: Digitera / iCareer -->
+                <div class="relative pl-8 sm:pl-16 group">
+                    <div class="absolute left-1 sm:left-6 top-1.5 w-4 h-4 rounded-full bg-darkBg border-2 border-emeraldAccent group-hover:bg-emeraldAccent transition"></div>
+                    <div class="glass-card rounded-2xl p-6 sm:p-8 border border-cardBorder space-y-4">
+                        <div class="flex flex-wrap items-start justify-between gap-2">
+                            <div>
+                                <span class="text-xs font-semibold uppercase text-emeraldAccent tracking-wider">Product & Agile Training</span>
+                                <h3 class="text-xl font-bold text-white">Digitera Program | iCareer</h3>
+                                <p class="text-gray-300 font-medium">Product Development & Career Readiness</p>
+                            </div>
+                            <span class="text-xs text-gray-400 font-mono">Training Program</span>
+                        </div>
+
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Hands-on training in product documentation, PRD analysis, user stories, Jira sprint planning, AI-assisted development techniques, and technical presentations.
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 text-xs font-mono text-gray-300">
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">PRD & User Stories</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Jira & Agile</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">AI Tools</span>
+                            <span class="px-2.5 py-1 rounded bg-darkBg border border-cardBorder">Documentation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Item: University -->
+                <div class="relative pl-8 sm:pl-16 group">
+                    <div class="absolute left-1 sm:left-6 top-1.5 w-4 h-4 rounded-full bg-darkBg border-2 border-emeraldAccent group-hover:bg-emeraldAccent transition"></div>
+                    <div class="glass-card rounded-2xl p-6 border border-cardBorder flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs font-semibold uppercase text-emeraldAccent tracking-wider">Bachelor Degree</span>
+                            <h3 class="text-lg font-bold text-white">Menoufia University — Faculty of Computer and Information</h3>
+                            <p class="text-gray-300 text-sm">Bachelor of Computer Science</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block px-3 py-1 rounded-full bg-emeraldAccent/10 border border-emeraldAccent/30 text-emeraldAccent font-semibold text-xs">
+                                Very Good with Honor
+                            </span>
+                            <p class="text-xs text-gray-400 mt-1">Jan 2021 – Jun 2026</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. FEATURED PROJECTS SECTION -->
+        <section id="projects" class="space-y-8 scroll-mt-20">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div class="space-y-2">
+                    <span class="text-emeraldAccent font-mono text-xs font-semibold tracking-wider uppercase">04. Portfolio</span>
+                    <h2 class="text-3xl font-bold text-white">Featured Case Studies</h2>
+                    <p class="text-gray-400 text-sm">Production-ready applications demonstrating frontend state management, authentication, and REST APIs.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- PROJECT 1: E-Commerce Web Application -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-cardBorder flex flex-col justify-between group hover:border-emeraldAccent/40 transition-all duration-300">
+                    <div>
+                        <!-- Project Visual Header -->
+                        <div class="h-48 bg-gradient-to-br from-gray-900 via-cardBg to-gray-800 p-6 flex flex-col justify-between relative border-b border-cardBorder">
+                            <div class="flex justify-between items-start">
+                                <span class="px-3 py-1 rounded-full bg-emeraldAccent text-black font-bold text-xs shadow-md">
+                                    ★ 100/100 Score
+                                </span>
+                                <span class="text-xs font-mono text-gray-400 bg-darkBg/60 px-2.5 py-1 rounded border border-cardBorder">
+                                    Route Graduation Project
+                                </span>
+                            </div>
+                            
+                            <div class="space-y-1">
+                                <div class="text-xs text-emeraldAccent font-mono">Next.js • React • TypeScript</div>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-emeraldAccent transition-colors">
+                                    E-Commerce Web Application
+                                </h3>
+                            </div>
+                        </div>
+
+                        <!-- Content Body -->
+                        <div class="p-6 space-y-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                Full-featured e-commerce platform built with Next.js App Router and TypeScript. Integrates REST APIs, authentication via NextAuth, Stripe payments, dynamic cart, wishlist, address management, and form handling using React Hook Form & Zod.
+                            </p>
+
+                            <!-- Feature Tags -->
+                            <div class="space-y-2">
+                                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Key Highlights:</span>
+                                <ul class="text-xs text-gray-300 space-y-1.5">
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> User Authentication & Account Management</li>
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> Product Search, Category Filtering & Wishlist</li>
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> Stripe Payment Gateway & Cash on Delivery</li>
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> TanStack Query for Dynamic Caching & Updates</li>
+                                </ul>
+                            </div>
+
+                            <!-- Tech Stack Pills -->
+                            <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono text-gray-300">
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">Next.js</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">React</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">TypeScript</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">Tailwind CSS</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">TanStack Query</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">shadcn/ui</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">Stripe</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="p-6 pt-0 flex items-center justify-between gap-3">
+                        <button onclick="openProjectModal('ecommerce')" class="flex-1 py-2.5 rounded-xl bg-cardBorder hover:bg-emeraldAccent hover:text-black text-white text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="eye" class="w-4 h-4"></i> Case Study
+                        </button>
+                        <a id="p1-github-btn" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-cardBg border border-cardBorder hover:text-emeraldAccent text-gray-300 text-xs font-medium transition" title="GitHub Repo">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                        <a id="p1-demo-btn" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-cardBg border border-cardBorder hover:text-emeraldAccent text-gray-300 text-xs font-medium transition" title="Live Demo">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2: Social Media Web Application -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-cardBorder flex flex-col justify-between group hover:border-emeraldAccent/40 transition-all duration-300">
+                    <div>
+                        <!-- Project Visual Header -->
+                        <div class="h-48 bg-gradient-to-br from-gray-900 via-cardBg to-gray-800 p-6 flex flex-col justify-between relative border-b border-cardBorder">
+                            <div class="flex justify-between items-start">
+                                <span class="px-3 py-1 rounded-full bg-emeraldAccent/20 text-emeraldAccent border border-emeraldAccent/40 font-bold text-xs">
+                                    ★ 50/50 Score
+                                </span>
+                                <span class="text-xs font-mono text-gray-400 bg-darkBg/60 px-2.5 py-1 rounded border border-cardBorder">
+                                    React Single Page App
+                                </span>
+                            </div>
+                            
+                            <div class="space-y-1">
+                                <div class="text-xs text-emeraldAccent font-mono">React.js • JavaScript • Axios</div>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-emeraldAccent transition-colors">
+                                    Social Media Web Application
+                                </h3>
+                            </div>
+                        </div>
+
+                        <!-- Content Body -->
+                        <div class="p-6 space-y-4">
+                            <p class="text-gray-300 text-sm leading-relaxed">
+                                Interactive web feed application allowing users to register, post content, upload images, comment on posts, manage profiles, and interact with live user feeds via asynchronous REST API calls.
+                            </p>
+
+                            <!-- Feature Tags -->
+                            <div class="space-y-2">
+                                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Key Highlights:</span>
+                                <ul class="text-xs text-gray-300 space-y-1.5">
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> User Registration, Login & Password Management</li>
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> Posts & Comments CRUD Operations</li>
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> User Profiles & Media Uploads</li>
+                                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emeraldAccent"></i> API Error Handling, Skeletons & Toast Notifications</li>
+                                </ul>
+                            </div>
+
+                            <!-- Tech Stack Pills -->
+                            <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono text-gray-300">
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">React.js</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">React Router</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">TanStack Query</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">Axios</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">Tailwind CSS</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">React Hook Form</span>
+                                <span class="px-2 py-0.5 rounded bg-darkBg border border-cardBorder">Zod</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="p-6 pt-0 flex items-center justify-between gap-3">
+                        <button onclick="openProjectModal('social')" class="flex-1 py-2.5 rounded-xl bg-cardBorder hover:bg-emeraldAccent hover:text-black text-white text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                            <i data-lucide="eye" class="w-4 h-4"></i> Case Study
+                        </button>
+                        <a id="p2-github-btn" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-cardBg border border-cardBorder hover:text-emeraldAccent text-gray-300 text-xs font-medium transition" title="GitHub Repo">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                        <a id="p2-demo-btn" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-cardBg border border-cardBorder hover:text-emeraldAccent text-gray-300 text-xs font-medium transition" title="Live Demo">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 6. CONTACT SECTION -->
+        <section id="contact" class="space-y-8 scroll-mt-20">
+            <div class="space-y-2">
+                <span class="text-emeraldAccent font-mono text-xs font-semibold tracking-wider uppercase">05. Get In Touch</span>
+                <h2 class="text-3xl font-bold text-white">Let's Connect</h2>
+                <p class="text-gray-400 text-sm">Feel free to reach out for frontend opportunities, collaborations, or project inquiries.</p>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-8">
+                <!-- Info Cards -->
+                <div class="md:col-span-2 space-y-4">
+                    <a href="mailto:mariam.elbendary.els@gmail.com" class="glass-card rounded-2xl p-5 border border-cardBorder flex items-center space-x-4 hover:border-emeraldAccent/40 transition group block">
+                        <div class="p-3 rounded-xl bg-emeraldAccent/10 text-emeraldAccent group-hover:bg-emeraldAccent group-hover:text-black transition">
+                            <i data-lucide="mail" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-mono">Direct Email</span>
+                            <span class="text-white font-medium text-sm sm:text-base group-hover:text-emeraldAccent transition">mariam.elbendary.els@gmail.com</span>
+                        </div>
+                    </a>
+
+                    <a href="tel:01099675801" class="glass-card rounded-2xl p-5 border border-cardBorder flex items-center space-x-4 hover:border-emeraldAccent/40 transition group block">
+                        <div class="p-3 rounded-xl bg-emeraldAccent/10 text-emeraldAccent group-hover:bg-emeraldAccent group-hover:text-black transition">
+                            <i data-lucide="phone" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-mono">Phone Number</span>
+                            <span class="text-white font-medium text-sm sm:text-base group-hover:text-emeraldAccent transition">01099675801</span>
+                        </div>
+                    </a>
+
+                    <div class="glass-card rounded-2xl p-5 border border-cardBorder flex items-center space-x-4">
+                        <div class="p-3 rounded-xl bg-emeraldAccent/10 text-emeraldAccent">
+                            <i data-lucide="map-pin" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 block font-mono">Location</span>
+                            <span class="text-white font-medium text-sm sm:text-base">Cairo, Egypt 🇪🇬</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="md:col-span-3 glass-card rounded-2xl p-6 sm:p-8 border border-cardBorder">
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="form-name" class="block text-xs font-semibold text-gray-300 mb-1">Your Name</label>
+                                <input type="text" id="form-name" required placeholder="John Doe" class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white placeholder-gray-500 text-sm focus:outline-none focus:border-emeraldAccent transition">
+                            </div>
+                            <div>
+                                <label for="form-email" class="block text-xs font-semibold text-gray-300 mb-1">Your Email</label>
+                                <input type="email" id="form-email" required placeholder="john@example.com" class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white placeholder-gray-500 text-sm focus:outline-none focus:border-emeraldAccent transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="form-subject" class="block text-xs font-semibold text-gray-300 mb-1">Subject</label>
+                            <input type="text" id="form-subject" required placeholder="Frontend Developer Opportunity" class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white placeholder-gray-500 text-sm focus:outline-none focus:border-emeraldAccent transition">
+                        </div>
+
+                        <div>
+                            <label for="form-message" class="block text-xs font-semibold text-gray-300 mb-1">Message</label>
+                            <textarea id="form-message" rows="4" required placeholder="Hello Mariam, I reviewed your portfolio and..." class="w-full px-4 py-2.5 rounded-xl bg-darkBg border border-cardBorder text-white placeholder-gray-500 text-sm focus:outline-none focus:border-emeraldAccent transition resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 rounded-xl bg-emeraldAccent hover:bg-emeraldHover text-black font-semibold text-sm transition shadow-lg shadow-emeraldAccent/10 flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-cardBorder bg-darkBg py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+            <div>
+                © 2026 <span class="text-white font-medium">Mariam Mohammed Elbendary</span>. All rights reserved.
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <a id="footer-github" href="https://github.com/Mariam-Elbendary" target="_blank" rel="noopener noreferrer" class="hover:text-emeraldAccent transition">GitHub</a>
+                <a id="footer-linkedin" href="https://linkedin.com/in/mariam-elbendary" target="_blank" rel="noopener noreferrer" class="hover:text-emeraldAccent transition">LinkedIn</a>
+                <a href="mailto:mariam.elbendary.els@gmail.com" class="hover:text-emeraldAccent transition">Email</a>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-2 rounded-lg bg-cardBg border border-cardBorder hover:text-emeraldAccent text-gray-300 transition" title="Back to Top">
+                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CASE STUDY MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="glass-card bg-cardBg border border-cardBorder rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative space-y-6">
+            <!-- Close Button -->
+            <button onclick="closeProjectModal()" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white rounded-lg bg-darkBg/60 border border-cardBorder">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Modal Content (Injected by JS) -->
+            <div id="modal-body" class="space-y-4">
+                <!-- Content injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIGURATION MODAL (For easy link updates) -->
+    <div id="config-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="glass-card bg-cardBg border border-cardBorder rounded-2xl max-w-md w-full p-6 relative space-y-5">
+            <div class="flex justify-between items-center border-b border-cardBorder pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="settings" class="w-5 h-5 text-emeraldAccent"></i> Configuration & Links
+                </h3>
+                <button onclick="toggleConfigModal()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Update your custom GitHub, LinkedIn, or Project Live Demo URLs anytime without editing code:
+            </p>
+
+            <form onsubmit="saveConfig(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-gray-300 mb-1">GitHub Username / URL</label>
+                    <input type="text" id="cfg-github" class="w-full px-3 py-2 rounded-lg bg-darkBg border border-cardBorder text-white font-mono focus:border-emeraldAccent focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-1">LinkedIn Profile URL</label>
+                    <input type="text" id="cfg-linkedin" class="w-full px-3 py-2 rounded-lg bg-darkBg border border-cardBorder text-white font-mono focus:border-emeraldAccent focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-1">E-Commerce Demo URL</label>
+                    <input type="text" id="cfg-p1-demo" class="w-full px-3 py-2 rounded-lg bg-darkBg border border-cardBorder text-white font-mono focus:border-emeraldAccent focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-300 mb-1">Social Media Demo URL</label>
+                    <input type="text" id="cfg-p2-demo" class="w-full px-3 py-2 rounded-lg bg-darkBg border border-cardBorder text-white font-mono focus:border-emeraldAccent focus:outline-none">
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="toggleConfigModal()" class="px-4 py-2 rounded-lg bg-cardBorder text-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-emeraldAccent text-black font-semibold">Save Config</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // State Configuration for Links
+        const appState = {
+            github: "https://github.com/Mariam-Elbendary",
+            linkedin: "https://linkedin.com/in/mariam-elbendary",
+            p1Demo: "https://github.com/Mariam-Elbendary",
+            p1Github: "https://github.com/Mariam-Elbendary",
+            p2Demo: "https://github.com/Mariam-Elbendary",
+            p2Github: "https://github.com/Mariam-Elbendary"
+        };
+
+        // Initialize Lucide Icons & Sync Links on Load
+        window.onload = function() {
+            lucide.createIcons();
+            syncLinks();
+        };
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const openIcon = document.getElementById('menu-icon-open');
+            const closeIcon = document.getElementById('menu-icon-close');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        // Show Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        // Handle Contact Form Submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const email = document.getElementById('form-email').value;
+            const subject = document.getElementById('form-subject').value;
+            const message = document.getElementById('form-message').value;
+
+            // Generate mailto link
+            const mailtoUrl = `mailto:mariam.elbendary.els@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("Name: " + name + "\nEmail: " + email + "\n\n" + message)}`;
+            
+            window.location.href = mailtoUrl;
+            showToast("Opening email client with your message!");
+            document.getElementById('contact-form').reset();
+        }
+
+        // Project Case Study Data
+        const caseStudies = {
+            ecommerce: {
+                title: "E-Commerce Web Application",
+                badge: "100/100 Score • Route Graduation Project",
+                tech: ["Next.js", "React", "TypeScript", "Tailwind CSS", "TanStack Query", "NextAuth.js", "React Hook Form", "Zod", "shadcn/ui", "Stripe API"],
+                description: "This application was built as the primary graduation project for Route Academy, scoring a perfect 100/100. It demonstrates high-end production standard architecture using Next.js App Router.",
+                features: [
+                    "User Authentication & Authorization via NextAuth.js",
+                    "Dynamic Product Browsing, Category Filtering, and Real-time Search",
+                    "Interactive Shopping Cart & Wishlist with live caching using TanStack Query",
+                    "Address Management & Dynamic Shipping Rate Calculation",
+                    "Integrated Payment Options: Stripe Gateway & Cash on Delivery",
+                    "Form Validation powered by React Hook Form + Zod schema definitions",
+                    "Polished UI built using Tailwind CSS and shadcn/ui components"
+                ]
+            },
+            social: {
+                title: "Social Media Web Application",
+                badge: "50/50 Score",
+                tech: ["React.js", "JavaScript ES6+", "React Router", "TanStack Query", "Axios", "Tailwind CSS", "React Hook Form", "Zod"],
+                description: "A dynamic Single Page Application (SPA) designed for social interaction. Achieved full score (50/50) in technical evaluation.",
+                features: [
+                    "User Account Management: Registration, Login, and Password Updates",
+                    "Interactive Feed with Post & Comment CRUD capabilities",
+                    "Image Upload Handling & Media Previews",
+                    "Custom Profile Views displaying user-created content",
+                    "Robust REST API integration using Axios and TanStack Query caching",
+                    "Comprehensive Error Handling, Skeleton Loaders, and Toast Alerts"
+                ]
+            }
+        };
+
+        // Open Case Study Modal
+        function openProjectModal(key) {
+            const modal = document.getElementById('project-modal');
+            const modalBody = document.getElementById('modal-body');
+            const data = caseStudies[key];
+
+            if (!data) return;
+
+            const techPills = data.tech.map(t => `<span class="px-2.5 py-1 rounded-md bg-darkBg border border-cardBorder text-xs font-mono text-emeraldAccent">${t}</span>`).join(' ');
+            const featureList = data.features.map(f => `<li class="flex items-start gap-2 text-sm text-gray-300"><i data-lucide="check-circle-2" class="w-4 h-4 text-emeraldAccent shrink-0 mt-0.5"></i> ${f}</li>`).join(' ');
+
+            modalBody.innerHTML = `
+                <div class="space-y-1">
+                    <span class="text-xs font-bold text-emeraldAccent uppercase font-mono">${data.badge}</span>
+                    <h3 class="text-2xl font-bold text-white">${data.title}</h3>
+                </div>
+                
+                <p class="text-gray-300 text-sm leading-relaxed">${data.description}</p>
+                
+                <div class="space-y-2">
+                    <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Technologies Used</h4>
+                    <div class="flex flex-wrap gap-2">${techPills}</div>
+                </div>
+
+                <div class="space-y-2 pt-2">
+                    <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Core Features & Architecture</h4>
+                    <ul class="space-y-2">${featureList}</ul>
+                </div>
+
+                <div class="pt-4 border-t border-cardBorder flex gap-3">
+                    <a href="${appState.github}" target="_blank" class="flex-1 py-2.5 rounded-xl bg-cardBorder hover:bg-emeraldAccent hover:text-black text-white text-xs font-semibold transition text-center">
+                        View GitHub Code
+                    </a>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+        }
+
+        // Toggle Config Modal
+        function toggleConfigModal() {
+            const modal = document.getElementById('config-modal');
+            modal.classList.toggle('hidden');
+
+            if (!modal.classList.contains('hidden')) {
+                document.getElementById('cfg-github').value = appState.github;
+                document.getElementById('cfg-linkedin').value = appState.linkedin;
+                document.getElementById('cfg-p1-demo').value = appState.p1Demo;
+                document.getElementById('cfg-p2-demo').value = appState.p2Demo;
+            }
+        }
+
+        function saveConfig(e) {
+            e.preventDefault();
+            appState.github = document.getElementById('cfg-github').value;
+            appState.linkedin = document.getElementById('cfg-linkedin').value;
+            appState.p1Demo = document.getElementById('cfg-p1-demo').value;
+            appState.p2Demo = document.getElementById('cfg-p2-demo').value;
+
+            syncLinks();
+            toggleConfigModal();
+            showToast("Links updated successfully!");
+        }
+
+        // Sync State to DOM Anchors
+        function syncLinks() {
+            // GitHub
+            ['nav-github-link', 'mobile-github-link', 'hero-github-link', 'footer-github', 'p1-github-btn', 'p2-github-btn'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.href = appState.github;
+            });
+
+            // LinkedIn
+            ['nav-linkedin-link', 'mobile-linkedin-link', 'hero-linkedin-link', 'footer-linkedin'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.href = appState.linkedin;
+            });
+
+            // Demos
+            const p1Demo = document.getElementById('p1-demo-btn');
+            if (p1Demo) p1Demo.href = appState.p1Demo;
+
+            const p2Demo = document.getElementById('p2-demo-btn');
+            if (p2Demo) p2Demo.href = appState.p2Demo;
+        }
+    </script>
+</body>
+</html>
